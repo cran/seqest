@@ -40,18 +40,19 @@
 #' @param ... Further arguments passed to or from other methods.
 #' @export
 #' @return a list containing the following components
-#' \item{beta}{the parameters that we estimate when the the iteration is
-#' finished}
-#' \item{rho}{estimate of correlation coefficient}
-#' \item{nonZeroIdx}{the index of the non zero coefficient}
-#' \item{N}{the current sample size when the stopping criterion is satisfied}
 #' \item{d}{the length of the fixed size confidence set that we specify}
+#' \item{n}{the current sample size when the stopping criterion is satisfied}
 #' \item{is_stopped}{the label of sequential iterations stop or not. When the
 #' value of is_stopped is TRUE, it means the iteration stops}
+#' \item{beta_est}{the parameters that we estimate when the the iteration is
+#' finished}
+#' \item{cov}{the covariance matrix between the estimated parameters}
+#' \item{rho}{estimate of correlation coefficient}
+#' \item{nonZeroIdx}{the index of the non zero coefficient}
 #' \item{corstr}{the correlation structure. The following are permitted:
-#' "independence", "exchangeable" and "ar1".}
+#' "independence", "exchangeable" and "ar1"}
 #' \item{family}{a description of the error distribution and link function to be
-#' used in the model.}
+#' used in the model}
 #'
 #' @references {
 #' Chen, Z., Wang, Z., & Chang, Y. I. (2019). Sequential adaptive variables and
@@ -182,7 +183,7 @@ seq_GEE_model <- function(formula, data=list(),
 
   if (strategy == 'random'){
     while (n_selected < n_pool) {
-      model <- evaluateModel(family, corstr, y, x, clusterID, criterion = "QIC", theta = .76, mostVar = 5)
+      model <- evaluateGEEModel(family, corstr, y, x, clusterID, criterion = "QIC", theta = .76, mostVar = 5)
       stop <- is_stop_ASE(model$sandwich, d, model$nonZeroIdx, verbose=FALSE)
 
       if (stop$stop) break
@@ -201,12 +202,13 @@ seq_GEE_model <- function(formula, data=list(),
       n_selected <- n_selected
     }
 
-    results <- list(beta      = model$beta,
+    results <- list(d          = d,
+                    n          = length(unique(clusterID)),
+                    is_stopped = stop,
+                    beta_est      = model$beta,
+                    cov        = model$sandwich,
                     rho        = model$rho,
                     nonZeroIdx = model$nonZeroIdx,
-                    N          = length(unique(clusterID)),
-                    d          = d,
-                    is_stopped = stop,
                     corstr     = corstr,
                     family     = family$family
     )
@@ -214,7 +216,7 @@ seq_GEE_model <- function(formula, data=list(),
     return(results)
   }else{
     while (n_selected < n_pool) {
-      model <- evaluateModel(family, corstr, y, x, clusterID, criterion = "QIC", theta = .76, mostVar = 5)
+      model <- evaluateGEEModel(family, corstr, y, x, clusterID, criterion = "QIC", theta = .76, mostVar = 5)
       stop <- is_stop_ASE(model$sandwich, d, model$nonZeroIdx, verbose=FALSE)
 
       if (stop$stop) break
@@ -236,12 +238,13 @@ seq_GEE_model <- function(formula, data=list(),
       n_selected <- n_selected
     }
 
-    results <- list(beta      = model$beta,
+    results <- list(d          = d,
+                    n          = length(unique(clusterID)),
+                    is_stopped = stop,
+                    beta_est      = model$beta,
+                    cov        = model$sandwich,
                     rho        = model$rho,
                     nonZeroIdx = model$nonZeroIdx,
-                    N          = length(unique(clusterID)),
-                    d          = d,
-                    is_stopped = stop,
                     corstr     = corstr,
                     family     = family$family
     )

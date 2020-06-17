@@ -5,7 +5,7 @@
 \title{The sequential logistic regression model for binary classification
   problem.}
 \usage{
-seq_bin_model(startnum, data.clust, xfix, yfix, dlen = 0.5,
+seq_bin_model(startnum, data.clust, xfix, yfix, d = 0.5,
   criterion = "BIC", pho = 0.05, ptarget = 0.5)
 }
 \arguments{
@@ -23,8 +23,8 @@ cluster.}
 \item{yfix}{Numeric vector consists of 0 or 1. The length of yfix must be the
 same as the xfix.}
 
-\item{dlen}{A numeric number specifying the length of the fixed size
-confidence set for our model. Note that the smaller the dlen, the larger
+\item{d}{A numeric number specifying the length of the fixed size
+confidence set for our model. Note that the smaller the d, the larger
 the sample size and the longer the time costs. The default value is 0.5.}
 
 \item{criterion}{A character string that determines the model selection
@@ -41,12 +41,13 @@ value is 0.5}
 }
 \value{
 a list containing the following components
-\item{dlen}{the length of the fixed size confidence set that we specify}
+\item{d}{the length of the fixed size confidence set that we specify}
 \item{n}{the current sample size when the stopping criterion is satisfied}
-\item{lab.seq}{the label of sequential iterations stop or not. When the value
-of lab.seq is 1, it means the iteration stops}
-\item{betahat}{the parameters that we estimate when the the iteration is
+\item{is_stopped}{the label of sequential iterations stop or not. When the value
+of is_stopped is 1, it means the iteration stops}
+\item{beta_est}{the parameters that we estimate when the the iteration is
 finished}
+\item{cov}{the covariance matrix between the estimated parameters}
 }
 \description{
 \code{seq_bin_model} estimates the the effective variables and chooses the
@@ -64,9 +65,12 @@ variables and its corresponding values and the number of the samples we
 select.
 }
 \examples{
-# generate the toy example
-library(foreach)
-beta <- c(-1,1,0.01,0.1)
+# generate the toy example. You should remove '#' to
+# run the following command.
+# library(doMC)
+# registerDoMC(9)
+# library(foreach)
+beta <- c(-1,1,0,0)
 N <- 10000
 nclass <- 1000
 seed <- 123
@@ -75,18 +79,17 @@ xfix <- data[['X']]
 yfix <- data[['y']]
 data.clust <- data[['data.clust']]
 startnum <- 24
-dlen <- 0.75
+d <- 0.75
 
 # use seq_bin_model to binary classification problem. You can remove '#' to
 # run the command.
-# results <- seq_bin_model(startnum, data.clust, xfix, yfix, dlen,
+# results <- seq_bin_model(startnum, data.clust, xfix, yfix, d,
 #                          criterion = "BIC", pho = 0.05, ptarget = 0.5)
 }
 \references{
 {
-Wang, Z., & Chang, Y. I. (2013). Sequential estimate for linear regression
-models with uncertain number of effective variables. \emph{Metrika}, 76(7), 949–978.
-doi:10.1007/s00184-012-0426-4
+Wang Z, Kwon Y, Chang YcI (2019). Active learning for binary classification
+with variable selection.  arXiv preprint arXiv:1901.10079.
 }
 }
 \seealso{

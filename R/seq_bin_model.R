@@ -25,8 +25,8 @@
 #'   cluster.
 #' @param yfix Numeric vector consists of 0 or 1. The length of yfix must be the
 #'   same as the xfix.
-#' @param dlen A numeric number specifying the length of the fixed size
-#'   confidence set for our model. Note that the smaller the dlen, the larger
+#' @param d A numeric number specifying the length of the fixed size
+#'   confidence set for our model. Note that the smaller the d, the larger
 #'   the sample size and the longer the time costs. The default value is 0.5.
 #' @param criterion A character string that determines the model selection
 #'   criterion to be used, matching one of 'BIC' or 'AIC. The default value is
@@ -39,18 +39,18 @@
 #'   value is 0.5
 #' @export
 #' @return a list containing the following components
-#' \item{dlen}{the length of the fixed size confidence set that we specify}
+#' \item{d}{the length of the fixed size confidence set that we specify}
 #' \item{n}{the current sample size when the stopping criterion is satisfied}
-#' \item{lab.seq}{the label of sequential iterations stop or not. When the value
-#' of lab.seq is 1, it means the iteration stops}
-#' \item{betahat}{the parameters that we estimate when the the iteration is
+#' \item{is_stopped}{the label of sequential iterations stop or not. When the value
+#' of is_stopped is 1, it means the iteration stops}
+#' \item{beta_est}{the parameters that we estimate when the the iteration is
 #' finished}
+#' \item{cov}{the covariance matrix between the estimated parameters}
 #'
 #'
 #' @references {
-#' Wang, Z., & Chang, Y. I. (2013). Sequential estimate for linear regression
-#' models with uncertain number of effective variables. \emph{Metrika}, 76(7), 949–978.
-#' doi:10.1007/s00184-012-0426-4
+#' Wang Z, Kwon Y, Chang YcI (2019). Active learning for binary classification
+#' with variable selection.  arXiv preprint arXiv:1901.10079.
 #' }
 #'
 #' @seealso{
@@ -62,9 +62,12 @@
 #'}
 #'
 #' @examples
-#' # generate the toy example
-#' library(foreach)
-#' beta <- c(-1,1,0.01,0.1)
+#' # generate the toy example. You should remove '#' to
+#' # run the following command.
+#' # library(doMC)
+#' # registerDoMC(9)
+#' # library(foreach)
+#' beta <- c(-1,1,0,0)
 #' N <- 10000
 #' nclass <- 1000
 #' seed <- 123
@@ -73,16 +76,16 @@
 #' yfix <- data[['y']]
 #' data.clust <- data[['data.clust']]
 #' startnum <- 24
-#' dlen <- 0.75
+#' d <- 0.75
 #'
 #' # use seq_bin_model to binary classification problem. You can remove '#' to
 #' # run the command.
-#' # results <- seq_bin_model(startnum, data.clust, xfix, yfix, dlen,
+#' # results <- seq_bin_model(startnum, data.clust, xfix, yfix, d,
 #' #                          criterion = "BIC", pho = 0.05, ptarget = 0.5)
 
 
-seq_bin_model <- function(startnum,data.clust,xfix,yfix,dlen=0.5,criterion="BIC",pho=0.05,
-                        ptarget=0.5){
+seq_bin_model <- function(startnum, data.clust, xfix, yfix, d = 0.5, criterion = "BIC",
+                          pho = 0.05, ptarget = 0.5){
   if (is.null(xfix) || is.null(yfix)) {
       stop("xfix and yfix must have data")
   }else {
@@ -107,12 +110,12 @@ seq_bin_model <- function(startnum,data.clust,xfix,yfix,dlen=0.5,criterion="BIC"
   z <- c(X%*%bhat)
   tmp <- exp(z)/((1+exp(z))^2)
   W <- diag(tmp)
-  seq.res <- ase_seq_logit(Y=Y, X=X, dlen=dlen, criterion=criterion)
-  lab.seq <- seq.res$lab.stop
+  seq.res <- ase_seq_logit(Y=Y, X=X, d=d, criterion=criterion)
+  is_stopped <- seq.res$is_stopped
   n <- startnum
   index <- (n+1):dim(xfix)[1];
   index_c <- 1:dim(xfix)[2];
-  while( ((lab.seq<0.5) ) & n <(dim(xfix)[1]) )
+  while( ((is_stopped<0.5) ) & n <(dim(xfix)[1]) )
   {
     n <- n+1;
     Xtemp  <-  X;
@@ -166,23 +169,24 @@ seq_bin_model <- function(startnum,data.clust,xfix,yfix,dlen=0.5,criterion="BIC"
     if(min(eigen(t(X)%*%W%*%X)$values)>1.0e-5)
     {
 
-      if(lab.seq < 0.5)
+      if(is_stopped < 0.5)
       {
-        seq.res <- ase_seq_logit(Y=Y,X=X,dlen=dlen, criterion=criterion)
-        lab.seq <- seq.res$lab.stop
+        seq.res <- ase_seq_logit(Y=Y,X=X,d=d, criterion=criterion)
+        is_stopped <- seq.res$is_stopped
       }
 
 
-      if((lab.seq>0.5) ) { break}
+      if((is_stopped>0.5) ) { break}
 
     }
 
   }
 
-  results <- list(dlen=dlen,
+  results <- list(d=d,
                   n = n,
-                  lab.seq = lab.seq,
-                  betahat = betahat
+                  is_stopped = is_stopped,
+                  beta_est = betahat,
+                  cov     = seq.res$cov
                   )
   class(results) <- c('seqbin','list')
   return(results)

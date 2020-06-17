@@ -12,7 +12,7 @@
 #' be'ord' or 'cat'. If it equals to 'ord', the element of the splitted will be
 #' composed of samples from Classes K and Classes K+1. Otherwise, the element of
 #' the splitted will be composed of samples from  Classes 0 and Classes K.
-#' @param train_id A numeiric vector denotes the id of the all training samples.
+#' @param train_id A numeric vector denotes the id of the all training samples.
 #'   Each sample corresponds to a unique identification from 1 to the length of
 #'   all the samples.
 #' @param train A numeric matrix denote the training datasets. The length of the
@@ -31,8 +31,8 @@
 #' specified by the init_N}
 #' \item{newY}{the value of the labels from 0 to K which denotes the number of
 #' categories}
-#' \item{labeled_ids}{the unique identification of the initial labeled dataset }
-#' \item{unlabeled_ids}{the unique identification of the initial unlabeled
+#' \item{labeled_ids}{the unique id of the initial labeled dataset }
+#' \item{unlabeled_ids}{the unique id of the unlabeled
 #' dataset}
 #' \item{data}{the all training samples which is composed of the samples
 #' corresponding to labeled_ids and samples corresponding to unlabeled_ids}

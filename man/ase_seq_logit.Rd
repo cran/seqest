@@ -4,7 +4,7 @@
 \alias{ase_seq_logit}
 \title{variable selection and stopping criterion}
 \usage{
-ase_seq_logit(X, Y, intercept = FALSE, criterion = "BIC", dlen = 0.5,
+ase_seq_logit(X, Y, intercept = FALSE, criterion = "BIC", d = 0.5,
   alpha = 0.95, gamma = 1, eta = 0.75, upper = 2, lower = 0.1,
   divid.num = 10)
 }
@@ -22,8 +22,8 @@ The default value is FALSE.}
 determines the model selection criterion to be used, matching one of 'BIC'
 or 'AIC. The default value is 'BIC'.}
 
-\item{dlen}{A numeric number specifying the length of the fixed size
-confidence set for our model. Note that the smaller the dlen, the larger
+\item{d}{A numeric number specifying the length of the fixed size
+confidence set for our model. Note that the smaller the d, the larger
 the sample size and the longer the time costs. The default value is 0.5.}
 
 \item{alpha}{A numeric number used in the chi-square distribution. The
@@ -48,11 +48,12 @@ upper and lower. Note that it should be a integer. The default value is 10.}
 \value{
 a list containing the following components
 \item{N}{current sample size}
-\item{lab.stop}{the label of sequential stop or not. When the value of
-lab.seq is 1, it means the iteration stops}
+\item{is_stopped}{the label of sequential stop or not. When the value of
+is_stopped is 1, it means the iteration stops}
 \item{betahat}{the estimated coefficients based on current X and Y. Note that
 some coefficient will be zero. These are the non-effectiva variables should
 be ignored.}
+\item{cov}{the covariance matrix between variables}
 \item{phat}{the number of effective varriables.}
 \item{ak}{1-alpha quantile of chisquare distribution with degree of freedom
 phat}

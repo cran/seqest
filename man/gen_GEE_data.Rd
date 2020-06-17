@@ -105,7 +105,5 @@ subject selection for GEE methods. \emph{Biometrics}. doi:10.1111/biom.13160
    \code{\link{gen_multi_data}} for categorical and ordinal case
 
    \code{\link{gen_bin_data}} for binary classification case.
-
-
 }
 }

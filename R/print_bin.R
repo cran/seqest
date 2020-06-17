@@ -21,15 +21,15 @@
 print.seqbin <- function(x, ...){
   if (!inherits(x, "seqbin"))
     stop("Object must be of class 'seqbin'")
-  if (x$lab.seq == 1){
+  if (x$is_stopped == 1){
     cat('The sample selection process is finished. \n')
     cat('The final result is shown below:','\n')
-    cat("The length of fixed size confidence set (dlen):", x$dlen,'\n')
+    cat("The length of fixed size confidence set (d):", x$d,'\n')
     cat("The number of samples at the end of iteration:",x$n,'\n')
-    cat('The estimated coefficient at the end of iteration:',paste(round(x$betahat,5),' '),'\n')
+    cat('The estimated coefficient at the end of iteration:',paste(round(x$beta_est,5),' '),'\n')
   }
-  if (x$lab.seq == 0){
+  if (x$is_stopped == 0){
     cat("The sample selection process isn't finished. ")
-    cat('Maybe you can reduce the length of dlen.')
+    cat('Maybe you can reduce the length of d')
   }
 }

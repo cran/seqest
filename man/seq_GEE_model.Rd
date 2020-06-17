@@ -47,18 +47,19 @@ following are permitted: "independence", "exchangeable" and "ar1".}
 }
 \value{
 a list containing the following components
-\item{beta}{the parameters that we estimate when the the iteration is
-finished}
-\item{rho}{estimate of correlation coefficient}
-\item{nonZeroIdx}{the index of the non zero coefficient}
-\item{N}{the current sample size when the stopping criterion is satisfied}
 \item{d}{the length of the fixed size confidence set that we specify}
+\item{n}{the current sample size when the stopping criterion is satisfied}
 \item{is_stopped}{the label of sequential iterations stop or not. When the
 value of is_stopped is TRUE, it means the iteration stops}
+\item{beta_est}{the parameters that we estimate when the the iteration is
+finished}
+\item{cov}{the covariance matrix between the estimated parameters}
+\item{rho}{estimate of correlation coefficient}
+\item{nonZeroIdx}{the index of the non zero coefficient}
 \item{corstr}{the correlation structure. The following are permitted:
-"independence", "exchangeable" and "ar1".}
+"independence", "exchangeable" and "ar1"}
 \item{family}{a description of the error distribution and link function to be
-used in the model.}
+used in the model}
 }
 \description{
 \code{seq_GEE_model} estimates the the effective variables and chooses the

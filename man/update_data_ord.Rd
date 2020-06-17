@@ -52,7 +52,7 @@ dataset and add the sample to the labeled dataset.
 {
 Li, J., Chen, Z., Wang, Z., & Chang, Y. I. (2020). Active learning in
 multiple-class classification problems via individualized binary models.
-\emph{Computational Statistics & Data Analysi}, 145, 106911.
+\emph{Computational Statistics & Data Analysis}, 145, 106911.
 doi:10.1016/j.csda.2020.106911
 }
 }

@@ -1,11 +1,11 @@
 #' @title The adaptive shrinkage estimate for generalized estimating equations
 #'
 #' @description
-#' \code{evaluateModel} is used to get a generalized estimating equation of the
+#' \code{evaluateGEEModel} is used to get a generalized estimating equation of the
 #' data by the adaptive shrinkage estimate method.
 #'
 #' @details
-#' evaluateModel fits the current data by generalized estimating equations(GEE)
+#' evaluateGEEModel fits the current data by generalized estimating equations(GEE)
 #' according to the value of the family argument and the corstr argument. We
 #' should notice that this is not the ordinary generalized estimating equations.
 #' It can determine the variables that have an impact on the response which
@@ -25,8 +25,6 @@
 #' @param gamma The parameters of the adaptive shrinkage estimate.
 #' @param leastVar The minimum number of variables.
 #' @param mostVar The maximum number of variables.
-
-
 #' @return a list containing the following components
 #' \item{rho}{the correlation coefficient of the clusters}
 #' \item{beta}{parameters that we estimate under the current samples}
@@ -35,7 +33,7 @@
 #' \item{call}{a list containing several matrices including the sandwich matrix}
 #'
 
-evaluateModel <- function(family, corstr, y, x, clusterID, criterion = "QIC", theta = 0.75,
+evaluateGEEModel <- function(family, corstr, y, x, clusterID, criterion = "QIC", theta = 0.75,
                           gamma = 1, leastVar = 3, mostVar = ncol(x)) {
   LINKS <- c("identity", "logit")
   linkv <- match(family$link, LINKS, -1L)

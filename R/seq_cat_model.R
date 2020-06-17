@@ -40,17 +40,18 @@
 #'   value is 'random'.
 #' @export
 #' @return a list containing the following components
-#' \item{N}{the current sample size when the stopping criterion is satisfied}
 #' \item{d}{the length of the fixed size confidence set that we specify}
+#' \item{n}{the current sample size when the stopping criterion is satisfied}
 #' \item{is_stopped}{the label of sequential iterations stop or not. When the
 #' value of is_stopped is TRUE, it means the iteration stops}
 #' \item{beta_est}{the estimated coeffificent when the criterion is safisfied}
+#' \item{cov}{the covariance matrix between the estimated parameters}
 #' \item{adaptive}{the sample selection criterion we used }
 #'
 #' @references {
 #' Li, J., Chen, Z., Wang, Z., & Chang, Y. I. (2020). Active learning in
 #' multiple-class classification problems via individualized binary models.
-#' \emph{Computational Statistics & Data Analysi}, 145, 106911.
+#' \emph{Computational Statistics & Data Analysis}, 145, 106911.
 #' doi:10.1016/j.csda.2020.106911
 #' }
 #'
@@ -65,8 +66,8 @@
 #'
 #' @examples
 #' # generate the toy example
-#' beta0 <- matrix(c(1,2,1,-1,1,2), ncol=2)
-#' res <-  gen_multi_data(beta0, N = 10000, type = 'cat', test_ratio = 0.3)
+#' beta <- matrix(c(1,2,1,-1,1,2), ncol=2)
+#' res <-  gen_multi_data(beta, N = 10000, type = 'cat', test_ratio = 0.3)
 #' train_id <- res$train_id
 #' train <- res$train
 #' test <- res$test
@@ -123,10 +124,12 @@ seq_cat_model <- function(labeled_ids, unlabeled_ids, splitted, newY, train, dat
       unlabeled_ids <- res$unlabeled_ids
       i <- i + 1
     } else {
-      results <- list(N = i,
+      results <- list(
                   d = d,
+                  n = i,
                   is_stopped = is_stopped,
                   beta_est = beta_mat,
+                  cov        =   cov$inv_sigma,
                   adaptive = adaptive)
       class(results) <- c('seqmulti','list')
       return(results)

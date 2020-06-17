@@ -7,14 +7,14 @@
 gen_bin_data(beta, N, nclass, seed)
 }
 \arguments{
-\item{beta}{A numeric vector that represent the true coefficient that used to
+\item{beta}{A numeric vector that represents the true coefficients that used to
 generate the synthesized data.}
 
 \item{N}{A numeric number specifying the number of the synthesized data. It
-should be a integer.}
+should be an integer.}
 
 \item{nclass}{A numeric number used to specify how many clusters the original
-data would be transformed into. It should be a integer.}
+data would be transformed into. It should be an integer.}
 
 \item{seed}{Set random number seed.}
 }
@@ -38,13 +38,12 @@ computation cost. You should specify the number of classes. In the function,
 it's the parameter nclass.
 }
 \examples{
-## For an example, see example(seq_bin_model)
+# For an example, see example(seq_bin_model)
 }
 \references{
 {
-Wang, Z., & Chang, Y. I. (2013). Sequential estimate for linear regression
-models with uncertain number of effective variables. \emph{Metrika}, 76(7), 949–978.
-doi:10.1007/s00184-012-0426-4
+Wang Z, Kwon Y, Chang YcI (2019). Active learning for binary classification
+with variable selection. arXiv preprint arXiv:1901.10079.
 }
 }
 \seealso{
@@ -52,7 +51,5 @@ doi:10.1007/s00184-012-0426-4
    \code{\link{gen_multi_data}} for categorical and ordinal case
 
    \code{\link{gen_GEE_data}} for generalized estimating equations case.
-
-
 }
 }

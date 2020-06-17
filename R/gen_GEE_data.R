@@ -62,8 +62,6 @@
 #'    \code{\link{gen_multi_data}} for categorical and ordinal case
 #'
 #'    \code{\link{gen_bin_data}} for binary classification case.
-#'
-#'
 #'}
 #'
 #' @examples

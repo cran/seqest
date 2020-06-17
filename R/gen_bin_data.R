@@ -10,12 +10,12 @@
 #' variance of 1. Next, they are clustered into classes to decrease the
 #' computation cost. You should specify the number of classes. In the function,
 #' it's the parameter nclass.
-#' @param beta A numeric vector that represent the true coefficient that used to
+#' @param beta A numeric vector that represents the true coefficients that used to
 #'   generate the synthesized data.
 #' @param N A numeric number specifying the number of the synthesized data. It
-#'   should be a integer.
+#'   should be an integer.
 #' @param nclass A numeric number used to specify how many clusters the original
-#'   data would be transformed into. It should be a integer.
+#'   data would be transformed into. It should be an integer.
 #' @param seed Set random number seed.
 #' @export
 #' @return a list of seven elements:
@@ -27,21 +27,18 @@
 #'
 #'
 #' @references {
-#' Wang, Z., & Chang, Y. I. (2013). Sequential estimate for linear regression
-#' models with uncertain number of effective variables. \emph{Metrika}, 76(7), 949–978.
-#' doi:10.1007/s00184-012-0426-4
+#' Wang Z, Kwon Y, Chang YcI (2019). Active learning for binary classification
+#' with variable selection. arXiv preprint arXiv:1901.10079.
 #' }
 #'
 #' @seealso{
 #'    \code{\link{gen_multi_data}} for categorical and ordinal case
 #'
 #'    \code{\link{gen_GEE_data}} for generalized estimating equations case.
-#'
-#'
 #'}
 #'
 #' @examples
-#'## For an example, see example(seq_bin_model)
+#' # For an example, see example(seq_bin_model)
 
 gen_bin_data <- function(beta, N, nclass, seed){
   set.seed(seed)

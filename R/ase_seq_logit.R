@@ -19,8 +19,8 @@
 #' @param criterion For the "chosfun" methods, a character string that
 #'   determines the model selection criterion to be used, matching one of 'BIC'
 #'   or 'AIC. The default value is 'BIC'.
-#' @param dlen A numeric number specifying the length of the fixed size
-#'   confidence set for our model. Note that the smaller the dlen, the larger
+#' @param d A numeric number specifying the length of the fixed size
+#'   confidence set for our model. Note that the smaller the d, the larger
 #'   the sample size and the longer the time costs. The default value is 0.5.
 #' @param alpha A numeric number used in the chi-square distribution. The
 #'   default value is 0.95.
@@ -37,18 +37,19 @@
 #'   upper and lower. Note that it should be a integer. The default value is 10.
 #' @return a list containing the following components
 #' \item{N}{current sample size}
-#' \item{lab.stop}{the label of sequential stop or not. When the value of
-#' lab.seq is 1, it means the iteration stops}
+#' \item{is_stopped}{the label of sequential stop or not. When the value of
+#' is_stopped is 1, it means the iteration stops}
 #' \item{betahat}{the estimated coefficients based on current X and Y. Note that
 #' some coefficient will be zero. These are the non-effectiva variables should
 #' be ignored.}
+#' \item{cov}{the covariance matrix between variables}
 #' \item{phat}{the number of effective varriables.}
 #' \item{ak}{1-alpha quantile of chisquare distribution with degree of freedom
 #' phat}
 #' \item{lamdmax}{the maximum eigenvalue based on the covariance of data}
 
 
-ase_seq_logit <- function(X, Y, intercept=FALSE, criterion="BIC", dlen=0.5, alpha= 0.95, gamma=1, eta=0.75,
+ase_seq_logit <- function(X, Y, intercept=FALSE, criterion="BIC", d=0.5, alpha= 0.95, gamma=1, eta=0.75,
                           upper=2, lower=0.1, divid.num=10)
 {
   n <- length(as.vector(Y))
@@ -96,7 +97,13 @@ ase_seq_logit <- function(X, Y, intercept=FALSE, criterion="BIC", dlen=0.5, alph
   maxeigen <- max(eigen(n*beta.cov)$values)
   ak <- sqrt(stats::qchisq(alpha,df=phat))
   sigseq <- 0.0
-  if((ak^2*maxeigen)<=(dlen^2*n) & (phat>0)) {sigseq <- 1.0}
-  result.seq <- list(N=n,lab.stop=sigseq,betahat=betahat,phat=phat,ak=ak,lamdmax=maxeigen)
+  if((ak^2*maxeigen)<=(d^2*n) & (phat>0)) {sigseq <- 1.0}
+  result.seq <- list(N=n,
+                     is_stopped=sigseq,
+                     betahat=betahat,
+                     cov = beta.cov,
+                     phat=phat,
+                     ak=ak,
+                     lamdmax=maxeigen)
   return(result.seq)
 }

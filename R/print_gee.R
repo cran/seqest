@@ -22,9 +22,9 @@ print.seqGEE <- function(x, ...){
   if (x$is_stopped$stop == TRUE){
     cat('The sample selection process is finished. \n')
     cat('The final result is shown below:','\n')
-    cat("The length of fixed size confidence set (dlen):", x$d,'\n')
-    cat("The number of samples at the end of iteration:",x$N,'\n')
-    cat('The estimated coefficient at the end of iteration:',paste(round(x$beta,5),' '),'\n')
+    cat("The length of fixed size confidence set (d):", x$d,'\n')
+    cat("The number of samples at the end of iteration:",x$n,'\n')
+    cat('The estimated coefficient at the end of iteration:',paste(round(x$beta_est,5),' '),'\n')
     cat('The index of the non zero coefficient:',x$nonZeroIdx, '\n')
 
   }
